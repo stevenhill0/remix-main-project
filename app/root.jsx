@@ -1,4 +1,4 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
+import { cssBundleHref } from '@remix-run/css-bundle';
 
 import {
   Links,
@@ -7,11 +7,20 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "@remix-run/react";
+} from '@remix-run/react';
 
-export const links = () => [
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-];
+// To make these styles available a route with a Link function MUST point to these style
+import sharedStyles from '~/styles/shared.css';
+
+export const meta = () => {
+  return [
+    {
+      charSet: 'utf-8',
+      title: 'New Remix App',
+      viewport: 'width=device-width, initial-scale=1',
+    },
+  ];
+};
 
 export default function App() {
   return (
@@ -31,3 +40,9 @@ export default function App() {
     </html>
   );
 }
+
+export const links = () => [
+  ...(cssBundleHref
+    ? [{ rel: 'stylesheet', href: cssBundleHref }]
+    : [{ rel: 'stylesheet', href: sharedStyles }]),
+];
