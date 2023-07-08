@@ -1,3 +1,4 @@
+import { Link, NavLink } from '@remix-run/react';
 import Logo from '../util/Logo';
 
 function MainHeader() {
@@ -6,23 +7,27 @@ function MainHeader() {
       <Logo />
       <nav id="main-nav">
         <ul>
+          {/* Using NavLink because we do not want to use <a></a> as it will force the browser to download the page again 
+          Remember: NavLink is the same as the Link Component, except it has an active CSS class so that you can target it showing when the link is active
+          */}
           <li>
-            <a href="/">Home</a>
+            <NavLink to="/">Home</NavLink>
           </li>
           <li>
-            <a href="/pricing">Pricing</a>
+            <NavLink to="/pricing">Pricing</NavLink>
           </li>
           <li>
-            <a href="/expenses">Expenses</a>
+            <NavLink to="/expenses">Expenses</NavLink>
           </li>
         </ul>
       </nav>
       <nav id="cta-nav">
         <ul>
           <li>
-            <a href="/auth" className="cta">
+            {/* Using a normal link here so that it does NOT have special styling, unlike the NavLink Component */}
+            <Link to="/auth" className="cta">
               Login
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>

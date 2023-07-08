@@ -1,4 +1,5 @@
 import { cssBundleHref } from '@remix-run/css-bundle';
+import MainHeader from '~/components/navigation/MainHeader';
 
 import {
   Links,
@@ -42,6 +43,7 @@ export default function App() {
         />
       </head>
       <body>
+        <MainHeader />
         <Outlet />
         <ScrollRestoration />
         <Scripts />

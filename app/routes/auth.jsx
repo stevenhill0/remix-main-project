@@ -1,7 +1,8 @@
+import AuthForm from '~/components/auth/AuthForm';
 import authStyles from '~/styles/auth.css';
 
 const Auth = () => {
-  return <div>auth</div>;
+  return <AuthForm />;
 };
 export default Auth;
 
