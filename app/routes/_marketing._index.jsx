@@ -1,6 +1,8 @@
 import { Link } from '@remix-run/react';
 import { FaArrowRight, FaChartBar, FaDollarSign } from 'react-icons/fa';
 
+import marketingStyles from '~/styles/marketing.css';
+
 export default function Index() {
   return (
     <main>
@@ -52,4 +54,8 @@ export const meta = () => {
     { title: 'New Remix App' },
     { name: 'description', content: 'Welcome to Remix!' },
   ];
+};
+
+export const link = () => {
+  return { rel: 'stylesheet', href: marketingStyles };
 };
