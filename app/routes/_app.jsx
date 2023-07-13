@@ -2,7 +2,7 @@ import { Outlet } from '@remix-run/react';
 import MainHeader from '~/components/navigation/MainHeader';
 import marketingStyles from '~/styles/marketing.css';
 
-const MarketingLayout = () => {
+const ExpensesLayout = () => {
   return (
     <>
       <MainHeader />
@@ -11,7 +11,7 @@ const MarketingLayout = () => {
   );
 };
 
-export default MarketingLayout;
+export default ExpensesLayout;
 
 export const links = () => {
   return [{ rel: 'stylesheet', href: marketingStyles }];
