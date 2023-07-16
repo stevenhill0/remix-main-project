@@ -1,6 +1,7 @@
 import { redirect } from '@remix-run/node';
 
 export function loader({ params }) {
+  // The star means all
   if (params['*'] === 'exp') {
     return redirect('/expenses');
   }
