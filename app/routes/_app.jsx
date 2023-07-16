@@ -1,11 +1,11 @@
 import { Outlet } from '@remix-run/react';
-import MainHeader from '~/components/navigation/MainHeader';
-import marketingStyles from '~/styles/marketing.css';
+import ExpensesHeader from '~/components/navigation/ExpenseHeader';
+import expensesStyles from '~/styles/expenses.css';
 
 const ExpensesLayout = () => {
   return (
     <>
-      <MainHeader />
+      <ExpensesHeader />
       <Outlet />
     </>
   );
@@ -14,5 +14,5 @@ const ExpensesLayout = () => {
 export default ExpensesLayout;
 
 export const links = () => {
-  return [{ rel: 'stylesheet', href: marketingStyles }];
+  return [{ rel: 'stylesheet', href: expensesStyles }];
 };
