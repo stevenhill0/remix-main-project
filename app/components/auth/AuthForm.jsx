@@ -2,7 +2,7 @@ import { Link, useSearchParams } from '@remix-run/react';
 import { FaLock, FaUserPlus } from 'react-icons/fa';
 
 function AuthForm() {
-  // We can use setSearchParams if we want to update the search terms/params
+  // We can use setSearchParams if we want to update the search terms/params. Otherwise do NOT need it
   // searchParams is an object that we use to extract the currently set value for a query parameter of our choice
   const [searchParams, setSearchParams] = useSearchParams();
   // The get method allows us to get the value for specific search parameter
