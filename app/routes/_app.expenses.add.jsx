@@ -18,4 +18,8 @@ const AddExpenses = () => {
     </Modal>
   );
 };
+
 export default AddExpenses;
+
+// We use the Remix action function for non-GET requests, example POST
+export const action = () => {};
