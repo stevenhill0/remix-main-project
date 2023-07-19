@@ -1,7 +1,10 @@
-import { Link } from '@remix-run/react';
+import { Link, useActionData } from '@remix-run/react';
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
+
+  // This is fetching the validation errors from _add.expenses.add.jsx
+  const validationErrors = useActionData();
 
   return (
     <form method="post" className="form" id="expense-form">
@@ -27,6 +30,16 @@ function ExpenseForm() {
           <input type="date" id="date" name="date" max={today} required />
         </p>
       </div>
+      {/* Checking if validationErrors exists i.e. is truthy */}
+      {validationErrors && (
+        <ul>
+          {/* Object.values will return an array of all the error messages */}
+          {/* And map the array of error messages into list items */}
+          {Object.values(validationErrors).map((error) => (
+            <li key={error}>{error}</li>
+          ))}
+        </ul>
+      )}
       <div className="form-actions">
         <button>Save Expense</button>
         <Link to="..">Cancel</Link>
