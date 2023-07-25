@@ -20,3 +20,18 @@ export const addExpense = async (expenseData) => {
     throw error;
   }
 };
+
+// FETCHING all expenses form the DB
+export const getExpenses = async () => {
+  try {
+    // If you do not pass any additional config to findMay it will fetch all expenses
+    // findMany returns a Promise which will eventually return an array
+    const expenses = await prisma.expense.findMany({
+      orderBy: { date: 'desc' },
+    });
+    return expenses;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
