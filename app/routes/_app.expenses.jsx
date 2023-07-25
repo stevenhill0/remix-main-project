@@ -1,25 +1,15 @@
-import { Link, Outlet } from '@remix-run/react';
+import { Link, Outlet, useLoaderData } from '@remix-run/react';
 import { FaDownload, FaPlus } from 'react-icons/fa';
 import ExpensesList from '~/components/expenses/ExpensesList';
 import expensesStyles from '~/styles/expenses.css';
-
-// Dummy data for now
-const DUMMY_EXPENSES = [
-  {
-    id: 'e1',
-    title: 'First Expense',
-    amount: 20.0,
-    date: new Date().toISOString(),
-  },
-  {
-    id: 'e2',
-    title: 'Second Expense',
-    amount: 15.98,
-    date: new Date().toISOString(),
-  },
-];
+import { getExpenses } from '../data/expenses.server';
 
 const ExpensesLayout = () => {
+  // We using useLoaderData to print the expense data to the screen
+  // It gives access to the closest loader that was called i.e. the loader function in this file
+  // UseLoaderData returns a simple JSON object with key/value pairs
+  const expenses = useLoaderData();
+
   return (
     <>
       <Outlet />
@@ -36,11 +26,19 @@ const ExpensesLayout = () => {
             <span>Load Raw Data</span>
           </a>
         </section>
-        <ExpensesList expenses={DUMMY_EXPENSES} />
+        <ExpensesList expenses={expenses} />
       </main>
     </>
   );
 };
 export default ExpensesLayout;
+
+// Remember: the loader always returns a response from the backend
+export const loader = () => {
+  // We are fetching the expenses from the DB
+  // The function returns a Promise, which eventually will return an array of the data
+  // If do NOT return a response using the Remix json() function, Remix will automatically wrap the returned data into a serialized response
+  return getExpenses();
+};
 
 export const links = () => [{ rel: 'stylesheet', href: expensesStyles }];
