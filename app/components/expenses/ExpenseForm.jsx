@@ -1,13 +1,17 @@
-import { Link, useActionData } from '@remix-run/react';
+import { Form, Link, useActionData, useNavigation } from '@remix-run/react';
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
 
   // This is fetching the validation errors from _add.expenses.add.jsx
   const validationErrors = useActionData();
+  const navigation = useNavigation();
+
+  // Checking if we are not in idle mode i.e.a are submitting data or we finished submitting data and Remix is updating the pages
+  const isSubmitting = navigation.state !== 'idle';
 
   return (
-    <form method="post" className="form" id="expense-form">
+    <Form method="post" className="form" id="expense-form">
       <p>
         <label htmlFor="title">Expense Title</label>
         <input type="text" id="title" name="title" required maxLength={30} />
@@ -34,17 +38,19 @@ function ExpenseForm() {
       {validationErrors && (
         <ul>
           {/* Object.values will return an array of all the error messages */}
-          {/* And map the array of error messages into list items */}
+          {/* And then mapping the array of error messages into list items */}
           {Object.values(validationErrors).map((error) => (
             <li key={error}>{error}</li>
           ))}
         </ul>
       )}
       <div className="form-actions">
-        <button>Save Expense</button>
+        <button disabled={isSubmitting}>
+          {isSubmitting ? 'Saving...' : 'Save Expense'}
+        </button>
         <Link to="..">Cancel</Link>
       </div>
-    </form>
+    </Form>
   );
 }
 
