@@ -24,12 +24,25 @@ export const addExpense = async (expenseData) => {
 // FETCHING all expenses form the DB
 export const getExpenses = async () => {
   try {
-    // If you do not pass any additional config to findMay it will fetch all expenses
+    // If you do not pass any additional config to findMany it will fetch all expenses
     // findMany returns a Promise which will eventually return an array
     const expenses = await prisma.expense.findMany({
       orderBy: { date: 'desc' },
     });
     return expenses;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+// Get a single expense by ID
+// Note we are calling this function in the loader inside _app.expenses.$id.jsx
+export const getExpense = async (id) => {
+  try {
+    // Finding the expesne with the same id
+    const expense = await prisma.expense.findFirst({ where: { id } });
+    return expense;
   } catch (error) {
     console.log(error);
     throw error;
