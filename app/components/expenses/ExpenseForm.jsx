@@ -2,8 +2,9 @@ import {
   Form,
   Link,
   useActionData,
-  useLoaderData,
+  useMatches,
   useNavigation,
+  useParams,
 } from '@remix-run/react';
 
 function ExpenseForm() {
@@ -15,7 +16,24 @@ function ExpenseForm() {
 
   // useLoaderData to pre-populate the form fields with the new expense data
   // Remember: the data may be undefined if is a new form: we must handle it appropriately
-  const expenseData = useLoaderData();
+  // Because ExpenseForm.jsx is a parent route it must rather use the useMatches() hook
+  // const expenseData = useLoaderData();
+  const matches = useMatches();
+
+  // The Remix useParams() hook allows us to extract the params from the urk
+  // We would use this hook if we cannot use the useLoaderData hook
+  // Since we using the parent route to get the data we cannot use the useLoaderData hook
+  // Instead we are using the useMatches() hook along with the useParams() hook
+  const params = useParams();
+
+  // Because the matches returned objected is an array, we can use the find method find the id we want to target
+  // This will return all expenses
+  const expenses = matches.find(
+    (match) => match.id === 'routes/_app.expenses'
+  ).data;
+
+  // Getting an individual expense by comparing the id in all the returned expense data with the params id
+  const expenseData = expenses.find((expense) => expense.id === params.id);
 
   // Setting default values in the case it is a new form and the values are undefined
   const defaultValues = expenseData

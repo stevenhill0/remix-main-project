@@ -1,7 +1,7 @@
 import { useNavigate } from '@remix-run/react';
 import ExpenseForm from '~/components/expenses/ExpenseForm';
 import Modal from '~/components/util/Modal';
-import { getExpense } from '../data/expenses.server';
+// import { getExpense } from '../data/expenses.server';
 
 const ExpensesDynamicValue = () => {
   // Using the useNavigate hook from Remix to navigate programmatically
@@ -22,13 +22,14 @@ const ExpensesDynamicValue = () => {
 
 export default ExpensesDynamicValue;
 
-export const loader = async ({ params }) => {
-  // The .id is used because it is the SAME name as the file i.e. id.jsx. MUST be the same name
-  // Getting the params ID
-  const expenseId = params.id;
+// loader function not needed since we already have a loader in the parent route i.e. ExpenseForm.jsx
+// export const loader = async ({ params }) => {
+//   // The .id is used because it is the SAME name as the file i.e. id.jsx. MUST be the same name
+//   // Getting the params ID
+//   const expenseId = params.id;
 
-  const expense = await getExpense(expenseId);
-  // Remember we can either return the response like below (Remix auto-wraps the json helper for us)
-  // Or alternatively manually construct the response with the Remix json() helper function and pass raw data to it
-  return expense;
-};
+//   const expense = await getExpense(expenseId);
+//   // Remember we can either return the response like below (Remix auto-wraps the json helper for us)
+//   // Or alternatively manually construct the response with the Remix json() helper function and pass raw data to it
+//   return expense;
+// };
