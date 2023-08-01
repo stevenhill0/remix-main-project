@@ -48,3 +48,25 @@ export const getExpense = async (id) => {
     throw error;
   }
 };
+
+// Updating the expense
+// We are going to use the update function with the _app.expenses.$id.jsx file
+export const updateExpense = async (id, expenseData) => {
+  try {
+    // update function takes a config object
+    await prisma.expense.update({
+      where: { id },
+      // data property shows which fields should be updated
+      data: {
+        title: expenseData.title,
+        //   Converting a string to a number: via the + sign i.e. what MongoDB expects
+        amount: +expenseData.amount,
+        //   Converting string to a data object i.e. what MongoDB expects
+        date: new Date(expenseData.date),
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
