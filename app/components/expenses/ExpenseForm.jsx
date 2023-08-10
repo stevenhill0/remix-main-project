@@ -47,8 +47,13 @@ function ExpenseForm() {
   // Checking if we are not in idle mode i.e.a are submitting data or we finished submitting data and Remix is updating the pages
   const isSubmitting = navigation.state !== 'idle';
 
+  // Good idea to have a dynamic method where if data exists use patch/updating, or if no data use 'post'
   return (
-    <Form method="post" className="form" id="expense-form">
+    <Form
+      method={expenseData ? 'patch' : 'post'}
+      className="form"
+      id="expense-form"
+    >
       <p>
         <label htmlFor="title">Expense Title</label>
         <input

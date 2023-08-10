@@ -2,7 +2,7 @@ import { redirect } from '@remix-run/node';
 import { useNavigate } from '@remix-run/react';
 import ExpenseForm from '~/components/expenses/ExpenseForm';
 import Modal from '~/components/util/Modal';
-import { updateExpense } from '../data/expenses.server';
+import { deleteExpense, updateExpense } from '../data/expenses.server';
 import { validateExpenseInput } from '../data/validation.server';
 // import { getExpense } from '../data/expenses.server';
 
@@ -43,26 +43,38 @@ export const action = async ({ params, request }) => {
   // It is the id set in the url
   const expenseId = params.id;
 
-  // formData() method fetches the form data via the Remix request object on the action function
-  const formData = await request.formData();
+  // Checking what the request method is e.g. 'post', 'patch', 'delete'
+  // When checking the request MUST be in ALL CAPS otherwise it will fail e.g. 'DELETE'
+  if (request.method === 'PATCH') {
+    // formData() method fetches the form data via the Remix request object on the action function
+    const formData = await request.formData();
 
-  // Object.fromEntries() converts the incoming data to a key/value object, where form input names are the keys, and form entered values are the values for the keys
-  // This way we get all the form input/keys and their values
-  // Can always log out to see what is in the object
-  // Used it before in _app.expenses.add.jsx
-  const expenseData = Object.fromEntries(formData);
+    // Object.fromEntries() converts the incoming data to a key/value object, where form input names are the keys, and form entered values are the values for the keys
+    // This way we get all the form input/keys and their values
+    // Can always log out to see what is in the object
+    // Used it before in _app.expenses.add.jsx
+    const expenseData = Object.fromEntries(formData);
 
-  try {
-    validateExpenseInput(expenseData);
-  } catch (error) {
-    // The error object we are returning is the validation object from validateExpenseInput()
-    return error;
+    try {
+      validateExpenseInput(expenseData);
+    } catch (error) {
+      // The error object we are returning is the validation object from validateExpenseInput()
+      return error;
+    }
+
+    // The code is very similar to the add action (_app.expenses.add.jsx) except we are updating
+    await updateExpense(expenseId, expenseData);
+
+    // Using the Remix redirect() utility function to redirect the user
+    // Redirecting the user to /expenses because was previously on '/expenses/someId'
+    return redirect('/expenses');
+   
+  } else if (request.method === 'DELETE'){
+     await deleteExpense(expenseId);
+
+    // Using the Remix redirect() utility function to redirect the user
+    // Redirecting the user to /expenses because was previously on '/expenses/someId'
+    return redirect('/expenses');
   }
-
-  // The code is very similar to the add action (_app.expenses.add.jsx) except we are updating
-  await updateExpense(expenseId, expenseData);
-
-  // Using the Remix redirect() utility function to redirect the user
-  // Redirecting the user to /expenses because was previously on '/expenses/someId'
-  return redirect('/expenses');
 };
+
