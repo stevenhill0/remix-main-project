@@ -1,10 +1,29 @@
-import { Form, Link } from '@remix-run/react';
+import { Link, useFetcher } from '@remix-run/react';
 
 function ExpenseListItem({ id, title, amount }) {
+  const fetcher = useFetcher();
   function deleteExpenseItemHandler() {
-    // tbd
+    // Confirm is a function from the browser: It creates a popup/dialogue with yes/no buttons: returns a Boolean
+    const proceed = confirm('Are you sure you want to delete this item?');
+
+    // Returning without deleting if user did not want to delete. Below delete request will not run since returning early
+    if (!proceed) {
+      return;
+    }
+    // The useFetcher, unlike useSubmit will NOT trigger a subsequent navigation, it will do NOTHING. Which is what we want if deleting
+    fetcher.submit(null, { method: 'delete', action: `/expenses/${id}` });
   }
 
+  // This is similar to useNavigation hook: we use it in ExpenseForm.jsx
+  if (fetcher.state !== 'idle') {
+    // If the state is not idle can return different content
+    // Will give hte user some visual feedback while it is deleting (i.e. not idle)
+    return (
+      <article className="expense-item locked">
+        <p>Deleting...</p>
+      </article>
+    );
+  }
   return (
     <article className="expense-item">
       <div>
@@ -12,7 +31,8 @@ function ExpenseListItem({ id, title, amount }) {
         <p className="expense-amount">${amount.toFixed(2)}</p>
       </div>
       <menu className="expense-actions">
-        {/* <button onClick={deleteExpenseItemHandler}>Delete</button> */}
+        {/* Using the onClick handler to delete an item with useFetcher hook */}
+        <button onClick={deleteExpenseItemHandler}>Delete</button>
 
         {/* 
         The remix Form component allows you to use delete as a method 
@@ -28,9 +48,9 @@ function ExpenseListItem({ id, title, amount }) {
         {/* The action url is the ID we want to target. The id is being passed as a prop
         It will then reach the action in _app.expenses.$id.jsx, which has already been set
          */}
-        <Form method="delete" action={`/expenses/${id}`}>
+        {/* <Form method="delete" action={`/expenses/${id}`}>
           <button>Delete</button>
-        </Form>
+        </Form> */}
         <Link to={id}>Edit</Link>
       </menu>
     </article>
