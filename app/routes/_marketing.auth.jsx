@@ -45,9 +45,6 @@ export const action = async ({ request }) => {
       return { credentials: error.message };
     }
   }
-
-  await signup(credentials);
-  return redirect('/expenses');
 };
 
 export const links = () => [{ rel: 'stylesheet', href: authStyles }];
