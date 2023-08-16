@@ -1,7 +1,6 @@
-import { redirect } from '@remix-run/node';
 import AuthForm from '~/components/auth/AuthForm';
 import authStyles from '~/styles/auth.css';
-import { signup } from '../data/auth.server';
+import { login, signup } from '../data/auth.server';
 import { validateCredentials } from '../data/validation.server';
 
 const Auth = () => {
@@ -32,12 +31,13 @@ export const action = async ({ request }) => {
   try {
     if (authMode === 'login') {
       //login logic
+      // Returning login because login returns the redirect response
+      return await login(credentials);
     } else {
       // signup
       // credentials contain the email password expected from the signup function
       // It returns a Promise so should await it
-      await signup(credentials);
-      return redirect('/expenses');
+      return await signup(credentials);
     }
   } catch (error) {
     // the error status will be 422 cos we set it in the signup function | auth.server.js file
