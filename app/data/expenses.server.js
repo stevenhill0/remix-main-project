@@ -30,7 +30,7 @@ export const getExpenses = async () => {
     });
     return expenses;
   } catch (error) {
-    throw new Error('Failed to get expenses!');
+    throw new Error('Failed to get all expenses!');
   }
 };
 

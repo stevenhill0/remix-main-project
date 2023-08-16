@@ -35,6 +35,11 @@ function ExpenseForm() {
   // Getting an individual expense by comparing the id in all the returned expense data with the params id
   const expenseData = expenses.find((expense) => expense.id === params.id);
 
+  // In the case the URL params id does not find an ID match we throw an error
+  if (params.id && !expenseData) {
+    return <p>Invalid expense id.</p>;
+  }
+
   // Setting default values in the case it is a new form and the values are undefined
   const defaultValues = expenseData
     ? {

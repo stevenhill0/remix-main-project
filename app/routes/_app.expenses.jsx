@@ -10,6 +10,8 @@ const ExpensesLayout = () => {
   // UseLoaderData returns a simple JSON object with key/value pairs
   const expenses = useLoaderData();
 
+  const hasExpenses = expenses && expenses.length > 0;
+
   return (
     <>
       <Outlet />
@@ -26,7 +28,18 @@ const ExpensesLayout = () => {
             <span>Load Raw Data</span>
           </a>
         </section>
-        <ExpensesList expenses={expenses} />
+        {/* If hasExpenses is true i.e. there are values in the array */}
+        {hasExpenses && <ExpensesList expenses={expenses} />}
+        {/* If hasExpenses is false i.e. there are NO values in the array */}
+        {!hasExpenses && (
+          <section id="no-expenses">
+            <h1>No expenses found</h1>
+            <p>
+              Start <link to="add" />
+              adding some expenses today.
+            </p>
+          </section>
+        )}
       </main>
     </>
   );
