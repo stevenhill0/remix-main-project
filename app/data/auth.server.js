@@ -92,5 +92,5 @@ export const login = async ({ email, password }) => {
   //   We are returning the redirect response that contains the cookie
   //   1st arg: existingUser id is the user id for the session
   // 2nd arg: redirect path
-  return createUserSession(existingUser, '/expenses');
+  return createUserSession(existingUser.id, '/expenses');
 };
