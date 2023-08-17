@@ -36,6 +36,24 @@ const createUserSession = async (userId, redirectPath) => {
   });
 };
 
+export const getUserFromSession = async (request) => {
+  // Getting the cookie header from the incoming request that contains the session cookie
+  // Note: the browser will automatically attach the session cookie to all requests that send to the backend, so easy to extract and validate
+  const session = await sessionStorage.getSession(
+    request.headers.get('Cookie')
+  );
+
+  // We know there is a userId because we are setting it in the above createUserSession function
+  const userId = session.get('userId');
+
+  if (!userId) {
+    return null;
+  }
+
+  // Returning the identifier for the user that makes up our session
+  return userId;
+};
+
 export const signup = async ({ email, password }) => {
   // Searching for user via unique email address
   const existingUser = await prisma.user.findFirst({ where: { email } });

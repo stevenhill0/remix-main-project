@@ -12,7 +12,7 @@ datasource db {
 
 model User {
 id       String   @id @default(auto()) @map("_id") @db.ObjectId
-email    String @unique
+email    String   @unique
 password String
 expenses Expense[]
 }
@@ -23,8 +23,8 @@ model Expense {
   amount    Float
   date      DateTime
   dateAdded DateTime @default(now())
-  User User @relation(fields: [userId], references: [id])
-  userId String @db.ObjectId
+  User      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
 }
 
 // After creating the User Model stop the server and type: yarn prisma db push

@@ -45,6 +45,8 @@ export const action = async ({ request }) => {
       return { credentials: error.message };
     }
   }
+
+  return await login(credentials);
 };
 
 export const links = () => [{ rel: 'stylesheet', href: authStyles }];
