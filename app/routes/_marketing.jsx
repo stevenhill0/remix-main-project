@@ -20,7 +20,7 @@ export default MarketingLayout;
 // loader functions can return Promises
 export const loader = ({ request }) => {
   // Because it is an async function it returns a Promise
-  getUserFromSession(request);
+  return getUserFromSession(request);
 };
 
 export const links = () => {

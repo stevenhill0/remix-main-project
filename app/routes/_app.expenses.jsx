@@ -2,6 +2,7 @@ import { Link, Outlet, useLoaderData } from '@remix-run/react';
 import { FaDownload, FaPlus } from 'react-icons/fa';
 import ExpensesList from '~/components/expenses/ExpensesList';
 import expensesStyles from '~/styles/expenses.css';
+import { requireUserSession } from '../data/auth.server';
 import { getExpenses } from '../data/expenses.server';
 
 const ExpensesLayout = () => {
@@ -47,11 +48,15 @@ const ExpensesLayout = () => {
 export default ExpensesLayout;
 
 // Remember: the loader always returns a response from the backend
-export const loader = () => {
+export const loader = async ({ request }) => {
+  // Will throw a redirect response if no user
+  await requireUserSession(request);
+
   // We are fetching the expenses from the DB
   // The function returns a Promise, which eventually will return an array of the data
   // If do NOT return a response using the Remix json() function, Remix will automatically wrap the returned data into a serialized response
-  return getExpenses();
+  const expenses = await getExpenses();
+  return expenses;
 };
 
 export const links = () => [{ rel: 'stylesheet', href: expensesStyles }];

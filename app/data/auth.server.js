@@ -54,6 +54,29 @@ export const getUserFromSession = async (request) => {
   return userId;
 };
 
+export const destroyUserSession = async (request) => {
+  const session = await sessionStorage.getSession(
+    request.headers.get('Cookie')
+  );
+
+  //  sessionStorage.destroySession() returns a Promise that yields a string that should be set as a value for set-Cookie on a response from the browser
+  // Cos the session must also be delete in the browser
+  return redirect('/', {
+    headers: { 'Set-Cookie': await sessionStorage.destroySession(session) },
+  });
+};
+
+export const requireUserSession = async (request) => {
+  const userId = await getUserFromSession(request);
+
+  // If no user
+  if (!userId) {
+    // Can also throw redirects
+    // Default behavior to 'throw' is to cancel the function
+    throw redirect('/auth?mode=login');
+  }
+};
+
 export const signup = async ({ email, password }) => {
   // Searching for user via unique email address
   const existingUser = await prisma.user.findFirst({ where: { email } });
