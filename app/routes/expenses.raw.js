@@ -19,7 +19,12 @@
 // };
 
 import { getExpenses } from '~/data/expenses.server';
+import { requireUserSession } from '../data/auth.server';
 
-export function loader() {
-  return getExpenses();
+export async function loader({ request }) {
+  // Will throw a redirect response if no user
+  // We are able to get the userId because requireUserSession returns it
+  const userId = await requireUserSession(request);
+
+  return getExpenses(userId);
 }

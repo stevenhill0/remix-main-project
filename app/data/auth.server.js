@@ -75,6 +75,9 @@ export const requireUserSession = async (request) => {
     // Default behavior to 'throw' is to cancel the function
     throw redirect('/auth?mode=login');
   }
+
+  // returning the userId so when calling requireUserSession, we don't need to call getUserFromSession again in other functions
+  return userId;
 };
 
 export const signup = async ({ email, password }) => {

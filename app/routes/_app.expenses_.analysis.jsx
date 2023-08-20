@@ -2,6 +2,7 @@ import { Link, useLoaderData } from '@remix-run/react';
 import Chart from '~/components/expenses/Chart';
 import ExpenseStatistics from '~/components/expenses/ExpenseStatistics';
 import expensesStyles from '~/styles/expenses.css';
+import { requireUserSession } from '../data/auth.server';
 import { getExpenses } from '../data/expenses.server';
 
 // Dummy data for now
@@ -48,8 +49,12 @@ const ExpensesAnalysis = () => {
 
 export default ExpensesAnalysis;
 
-export const loader = async () => {
-  const expenses = await getExpenses(); // By returning notes, gives the above Notes Component access to the raw data by using the useLoaderData() hook, provided by Remix // Note: the data is temporarily converted to a data string  so you cannot return any objects, will ONLY get the plain data i.e. strings
+export const loader = async ({ request }) => {
+  // Will throw a redirect response if no user
+  // We are able to get the userId because requireUserSession returns it
+  const userId = await requireUserSession(request);
+
+  const expenses = await getExpenses(userId); // By returning notes, gives the above Notes Component access to the raw data by using the useLoaderData() hook, provided by Remix // Note: the data is temporarily converted to a data string  so you cannot return any objects, will ONLY get the plain data i.e. strings
   return expenses;
 };
 

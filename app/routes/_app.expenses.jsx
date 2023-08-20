@@ -50,12 +50,13 @@ export default ExpensesLayout;
 // Remember: the loader always returns a response from the backend
 export const loader = async ({ request }) => {
   // Will throw a redirect response if no user
-  await requireUserSession(request);
+  // We are able to get the userId because requireUserSession returns it
+  const userId = await requireUserSession(request);
 
   // We are fetching the expenses from the DB
   // The function returns a Promise, which eventually will return an array of the data
   // If do NOT return a response using the Remix json() function, Remix will automatically wrap the returned data into a serialized response
-  const expenses = await getExpenses();
+  const expenses = await getExpenses(userId);
   return expenses;
 };
 

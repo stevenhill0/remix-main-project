@@ -2,6 +2,7 @@ import { redirect } from '@remix-run/node';
 import { useNavigate } from '@remix-run/react';
 import ExpenseForm from '~/components/expenses/ExpenseForm';
 import Modal from '~/components/util/Modal';
+import { requireUserSession } from '../data/auth.server';
 import { addExpense } from '../data/expenses.server';
 import { validateExpenseInput } from '../data/validation.server';
 
@@ -28,6 +29,9 @@ export default AddExpenses;
 //  The destructured request property is automatically available on the action object (Remix returned object)
 // Remember: action function MUST return something e.g. a response or raw JSON data
 export const action = async ({ request }) => {
+  // We are able to get the userId because requireUserSession returns it
+  const userId = await requireUserSession(request);
+
   // formData resolves a Promise giving us ACCESS to the submitted data
   // Note: the object stored in the formData variable object does not have basic key/values, but methods we can call e.g. get()
   const formData = await request.formData();
@@ -50,7 +54,7 @@ export const action = async ({ request }) => {
     return error;
   }
 
-  await addExpense(expenseData);
+  await addExpense(expenseData, userId);
 
   // Setting a redirect response because when we got the form data we want to redirect the user away from this page to view the list of expenses
   // redirect takes one arg: the path we want to redirect to

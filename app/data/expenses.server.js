@@ -1,7 +1,8 @@
 import { prisma } from './database.server';
 
 // Data is coming from the form i.e. components/expenses/ExpenseForm.jsx
-export const addExpense = async (expenseData) => {
+// we want to link an expense to a user
+export const addExpense = async (expenseData, userId) => {
   try {
     return await prisma.expense.create({
       // The + sign in front of expenseData tells Prisma to convert to a number
@@ -13,6 +14,9 @@ export const addExpense = async (expenseData) => {
         amount: +expenseData.amount,
         //   Converting string to a data object i.e. what MongoDB expects
         date: new Date(expenseData.date),
+        // connect is a reserved name in Prisma
+        // Setting id = userId (passing in as  an argument)
+        User: { connect: { id: userId } },
       },
     });
   } catch (error) {
@@ -21,12 +25,21 @@ export const addExpense = async (expenseData) => {
 };
 
 // FETCHING all expenses form the DB
-export const getExpenses = async () => {
+// Want to get the expenses for the logged in user
+export const getExpenses = async (userId) => {
+  if (!userId) {
+    throw new Error('Failed to get all expenses!');
+  }
+
   try {
     // If you do not pass any additional config to findMany it will fetch all expenses
     // findMany returns a Promise which will eventually return an array
     const expenses = await prisma.expense.findMany({
       orderBy: { date: 'desc' },
+      // The userId key is from the Prisma object. The value is the passed in argument
+      // can user the shortcut by only using UserId once instead of key/value pairs
+      // If userId is undefined, Prisma will return ALL results. It treats undefined as a wild card
+      where: { userId: userId },
     });
     return expenses;
   } catch (error) {
